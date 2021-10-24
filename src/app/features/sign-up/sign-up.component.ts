@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
+import { DialogData, MessageDialogComponent } from 'src/app/shared/message-dialog/message-dialog.component';
 
 function validateDateOfBirth() {
   return (control: FormControl) => {
@@ -79,7 +81,8 @@ export class SignUpComponent implements OnInit {
     return this.userRegisterationForm.get('corporateAccountDetails')?.get('companyOfficerDetails') as FormArray;
   }
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+    private dialog: MatDialog) { }
 
   ngOnInit() {
     this.userRegisterationForm = this.formBuilder.group({
@@ -176,7 +179,16 @@ export class SignUpComponent implements OnInit {
   }
 
   onRegister() {
-    console.log(this.userRegisterationForm.value);
+    this.showMessageDialog();
+  }
+
+  showMessageDialog() {
+    const dialogData: DialogData = {
+      message: 'Registeration completed successfully'
+    }
+    this.dialog.open(MessageDialogComponent, { 
+      data: dialogData
+    });
   }
 
 }
