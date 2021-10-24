@@ -1,1 +1,295 @@
-<p>sign-up works!</p>
+<div class="sign-up-form">
+    <h4>Please fill the following details</h4>
+    <form [formGroup]="userRegisterationForm" novalidate (ngSubmit)="onRegister()">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label class="required" for="accountType">Account Type</label>
+                <select class="form-control" formControlName="accountType" id="accountType"
+                    (change)="onAccountTypeChange()"
+                    [ngClass]="{'is-invalid': accountType?.invalid && (accountType?.dirty || accountType?.touched)}">
+                    <option value=''>Select</option>
+                    <option *ngFor="let accType of accountTypes">{{accType}}</option>
+                </select>
+                <span class="invalid-feedback">
+                    <span *ngIf="accountType?.errors?.required">
+                        Please select account type
+                    </span>
+                </span>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="required" for="numberOfIndividuals">Number of Individuals</label>
+                <select class="form-control" formControlName="numberOfIndividuals" id="numberOfIndividuals"
+                    (change)="onNumberOfIndividualChange()"
+                    [ngClass]="{'is-invalid': numberOfIndividuals?.invalid && (numberOfIndividuals?.dirty || numberOfIndividuals?.touched)}">
+                    <option value=''>Select</option>
+                    <option *ngFor="let count of noOfIndividuals">{{count}}</option>
+                </select>
+                <span class="invalid-feedback">
+                    <span *ngIf="numberOfIndividuals?.errors?.required">
+                        Please select number of individuals
+                    </span>
+                </span>
+            </div>
+        </div>
+
+        <ng-container formArrayName="individualDetails"
+            *ngFor="let detailForm of individualDetails?.controls; index as idx">
+            <div class="card bg-light">
+                <div class="card-body" [formGroupName]="idx">
+                    <div class="form-row">
+                        <div class="form-check form-check-inline" *ngFor="let salutation of salutations; index as i">
+                            <input class="form-check-input" formControlName="salutation" type="radio" name="salutation"
+                                id="{{i}}" value="{{salutation}}">
+                            <label class="form-check-label" for="{{i}}">{{salutation}}</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="required" for="firstName">First Name</label>
+                            <input type="text" class="form-control" formControlName="firstName" id="firstName"
+                                placeholder="FirstName"
+                                [ngClass]="{'is-invalid': detailForm?.get('firstName')?.invalid && (detailForm?.get('firstName')?.dirty || detailForm?.get('firstName')?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="detailForm?.get('firstName')?.errors?.required">
+                                    Please enter first name
+                                </span>
+                            </span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="required" for="lastName">Last Name</label>
+                            <input type="text" class="form-control" formControlName="lastName" id="lastName"
+                                placeholder="LastName"
+                                [ngClass]="{'is-invalid': detailForm?.get('lastName')?.invalid && (detailForm?.get('lastName')?.dirty || detailForm?.get('lastName')?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="detailForm?.get('lastName')?.errors?.required">
+                                    Please enter last name
+                                </span>
+                            </span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="required" for="dateOfBirth">Date Of Birth</label>
+                            <input type="date" class="form-control" formControlName="dateOfBirth" id="dateOfBirth"
+                                placeholder="dd/mm/yyyy"
+                                [ngClass]="{'is-invalid': detailForm?.get('dateOfBirth')?.invalid && (detailForm?.get('dateOfBirth')?.dirty || detailForm?.get('dateOfBirth')?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="detailForm?.get('dateOfBirth')?.errors?.required">
+                                    Please enter date of birth
+                                </span>
+                                <span *ngIf="detailForm?.get('dateOfBirth')?.errors?.invalidDate">
+                                    Invalid date of birth
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container [ngSwitch]="accountType?.value">
+            <div class="card bg-light" *ngSwitchCase="'Personal'" formGroupName="personalAccountDetails">
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="required" for="personalAccountName">Account Name</label>
+                            <input type="text" class="form-control" formControlName="accountName"
+                                id="personalAccountName"
+                                [ngClass]="{'is-invalid': accountName?.invalid && (accountName?.dirty || accountName?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="accountName?.errors?.required">
+                                    Please enter account name
+                                </span>
+                            </span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="required" for="accountHolderFirstName">Account Holder First Name</label>
+                            <input type="text" class="form-control" formControlName="accountHolderFirstName"
+                                id="accountHolderFirstName"
+                                [ngClass]="{'is-invalid': accountHolderFirstName?.invalid && (accountHolderFirstName?.dirty || accountHolderFirstName?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="accountHolderFirstName?.errors?.required">
+                                    Please enter account holder first name
+                                </span>
+                            </span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="required" for="accountHolderLastName">Account Holder Last Name</label>
+                            <input type="text" class="form-control" formControlName="accountHolderLastName"
+                                id="accountHolderLastName"
+                                [ngClass]="{'is-invalid': accountHolderLastName?.invalid && (accountHolderLastName?.dirty || accountHolderLastName?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="accountHolderLastName?.errors?.required">
+                                    Please enter account holder last name
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="required" for="tfn">TFN</label>
+                            <input type="text" class="form-control" formControlName="tfn" id="tfn"
+                                [ngClass]="{'is-invalid': tfn?.invalid && (tfn?.dirty || tfn?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="tfn?.errors?.required">
+                                    Please enter TFN
+                                </span>
+                            </span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="required" for="personalBankAccountNumber">Bank Account Number</label>
+                            <input type="text" class="form-control" formControlName="bankAccountNumber"
+                                id="personalBankAccountNumber" maxlength="8"
+                                [ngClass]="{'is-invalid': bankAccountNumber?.invalid && (bankAccountNumber?.dirty || bankAccountNumber?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="bankAccountNumber?.errors?.required">
+                                    Please enter bank account number
+                                </span>
+                                <span *ngIf="bankAccountNumber?.errors?.pattern">
+                                    Invalid bank account number
+                                </span>
+                            </span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="required" for="personalBankAccountBSB">Bank Account BSB</label>
+                            <input type="text" class="form-control" formControlName="bankAccountBSB"
+                                id="personalBankAccountBSB" maxlength="6"
+                                [ngClass]="{'is-invalid': bankAccountBSB?.invalid && (bankAccountBSB?.dirty || bankAccountBSB?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="bankAccountBSB?.errors?.required">
+                                    Please enter bank account BSB
+                                </span>
+                                <span *ngIf="bankAccountBSB?.errors?.pattern">
+                                    Invalid bank account BSB
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-light" *ngSwitchCase="'Corporate'" formGroupName="corporateAccountDetails">
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="required" for="corporateAccountName">Account Name</label>
+                            <input type="text" class="form-control" formControlName="accountName"
+                                id="corporateAccountName"
+                                [ngClass]="{'is-invalid': accountName?.invalid && (accountName?.dirty || accountName?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="accountName?.errors?.required">
+                                    Please enter account name
+                                </span>
+                            </span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="required" for="companyName">Account Holder First Name</label>
+                            <input type="text" class="form-control" formControlName="companyName" id="companyName"
+                                [ngClass]="{'is-invalid': companyName?.invalid && (companyName?.dirty || companyName?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="companyName?.errors?.required">
+                                    Please enter company name
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="required" for="abn">ABN</label>
+                            <input type="text" class="form-control" formControlName="abn" id="abn"
+                                [ngClass]="{'is-invalid': abn?.invalid && (abn?.dirty || abn?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="abn?.errors?.required">
+                                    Please enter ABN
+                                </span>
+                            </span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="required" for="corporateBankAccountNumber">Bank Account Number</label>
+                            <input type="text" class="form-control" formControlName="bankAccountNumber"
+                                id="corporateBankAccountNumber" maxlength="8"
+                                [ngClass]="{'is-invalid': bankAccountNumber?.invalid && (bankAccountNumber?.dirty || bankAccountNumber?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="bankAccountNumber?.errors?.required">
+                                    Please enter bank account number
+                                </span>
+                                <span *ngIf="bankAccountNumber?.errors?.pattern">
+                                    Invalid bank account number
+                                </span>
+                            </span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="required" for="corporateBankAccountBSB">Bank Account BSB</label>
+                            <input type="text" class="form-control" formControlName="bankAccountBSB"
+                                id="corporateBankAccountBSB" maxlength="6"
+                                [ngClass]="{'is-invalid': bankAccountBSB?.invalid && (bankAccountBSB?.dirty || bankAccountBSB?.touched)}">
+                            <span class="invalid-feedback">
+                                <span *ngIf="bankAccountBSB?.errors?.required">
+                                    Please enter bank account BSB
+                                </span>
+                                <span *ngIf="bankAccountBSB?.errors?.pattern">
+                                    Invalid bank account BSB
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="required" for="numberOfCompanyOfficers">Number of Company Officers</label>
+                            <select class="form-control" formControlName="numberOfCompanyOfficers"
+                                id="numberOfCompanyOfficers" (change)="onNumberOfCompanyOfficersChange()"
+                                [ngClass]="{'is-invalid': numberOfCompanyOfficers?.invalid && (numberOfCompanyOfficers?.dirty || numberOfCompanyOfficers?.touched)}">
+                                <option value=''>Select</option>
+                                <option *ngFor="let count of noOfCompanyOfficers">{{count}}</option>
+                            </select>
+                            <span class="invalid-feedback">
+                                <span *ngIf="numberOfCompanyOfficers?.errors?.required">
+                                    Please select number of company officers
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <ng-container formArrayName="companyOfficerDetails"
+                        *ngFor="let detailForm of companyOfficerDetails?.controls; index as idx">
+                        <div class="card bg-light">
+                            <div class="card-body" [formGroupName]="idx">
+                                <div class="form-row">
+                                    <div class="form-check form-check-inline"
+                                        *ngFor="let salutation of salutations; index as i">
+                                        <input class="form-check-input" formControlName="salutation" type="radio"
+                                            name="salutation" id="{{i}}" value="{{salutation}}">
+                                        <label class="form-check-label" for="{{i}}">{{salutation}}</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label class="required" for="firstName">First Name</label>
+                                        <input type="text" class="form-control" formControlName="firstName"
+                                            id="firstName" placeholder="FirstName"
+                                            [ngClass]="{'is-invalid': detailForm?.get('firstName')?.invalid && (detailForm?.get('firstName')?.dirty || detailForm?.get('firstName')?.touched)}">
+                                        <span class="invalid-feedback">
+                                            <span *ngIf="detailForm?.get('firstName')?.errors?.required">
+                                                Please enter first name
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label class="required" for="lastName">Last Name</label>
+                                        <input type="text" class="form-control" formControlName="lastName" id="lastName"
+                                            placeholder="LastName"
+                                            [ngClass]="{'is-invalid': detailForm?.get('lastName')?.invalid && (detailForm?.get('lastName')?.dirty || detailForm?.get('lastName')?.touched)}">
+                                        <span class="invalid-feedback">
+                                            <span *ngIf="detailForm?.get('lastName')?.errors?.required">
+                                                Please enter last name
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </ng-container>
+        <div class="container d-flex justify-content-center register">
+            <button class="btn btn-primary" *ngIf="userRegisterationForm.valid">Register</button>
+        </div>
+    </form>
+</div>

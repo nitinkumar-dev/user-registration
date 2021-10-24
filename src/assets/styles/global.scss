@@ -1,4 +1,24 @@
 // SCSS file imports and global rules goes here
 
-@use 'colors';
+@use 'colors' as *;
 @use 'footer';
+
+.required:after {
+    content:"*";
+    color: $red;
+}
+
+.sign-up-form {
+    height: 88vh;
+    padding: 1vw;
+    overflow-y: auto;
+
+    .card:not(:first-child) {
+        margin-top: 2vh;
+    }
+}
+
+.register {
+    margin-top: 2vh;
+}
+
